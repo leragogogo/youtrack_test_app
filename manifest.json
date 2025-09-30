@@ -1,0 +1,18 @@
+{
+  "name" : "test-task-app",
+  "title" : "Test task app",
+  "description" :  "It's an app for the internship task",
+  "$schema": "https://json.schemastore.org/youtrack-app.json",
+  "vendor": {
+    "name": "Valeriia"
+  },
+  "icon": "icon.svg",
+  "widgets": [
+    {
+      "key": "main_menu_item",
+      "name": "main_menu_item",
+      "extensionPoint": "MAIN_MENU_ITEM",
+      "indexPath": "main_menu_item/index.html"
+    }
+  ]
+}
