@@ -3,9 +3,6 @@ import {defineConfig} from 'vite';
 import {viteStaticCopy} from 'vite-plugin-static-copy';
 import react from '@vitejs/plugin-react';
 
-/*
-      See https://vitejs.dev/config/
-*/
 
 export default defineConfig({
   plugins: [
@@ -15,6 +12,10 @@ export default defineConfig({
         {
           src: '../manifest.json',
           dest: '.'
+        },
+        { 
+          src: '../entity-extensions.json', 
+          dest: '.' 
         },
         {
           src: '*.*',
@@ -26,16 +27,6 @@ export default defineConfig({
         }
       ]
     }),
-    viteStaticCopy({
-      targets: [
-        // Widget icons and configurations
-        {
-          src: 'widgets/**/*.{svg,png,jpg,json}',
-          dest: '.'
-        }
-      ],
-      structured: true
-    })
   ],
   root: './src',
   base: '',
@@ -48,7 +39,7 @@ export default defineConfig({
     assetsDir: 'widgets/assets',
     rollupOptions: {
       input: {
-        // List every widget entry point here
+        mainMenuItem: resolve('src/widgets/main_menu_item/index.html')
       }
     }
   }

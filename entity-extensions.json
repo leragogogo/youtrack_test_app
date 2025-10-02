@@ -1,0 +1,13 @@
+{
+    "entityTypeExtensions": [
+        {
+            "entityType": "AppGlobalStorage",
+
+            "properties":{
+                "globalFlag":{
+                    "type": "boolean"
+                }
+            }
+        }
+    ]
+}

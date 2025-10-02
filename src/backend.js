@@ -2,12 +2,44 @@ exports.httpHandler = {
   endpoints: [
     {
       method: 'GET',
-      path: 'debug',
+      path: 'flag',
       handle: function handle(ctx) {
-        // See https://www.jetbrains.com/help/youtrack/devportal-apps/apps-reference-http-handlers.html#request
-        const requestParam = ctx.request.getParameter('test');
-        // See https://www.jetbrains.com/help/youtrack/devportal-apps/apps-reference-http-handlers.html#response
-        ctx.response.json({test: requestParam});
+        try {
+          ctx.response.json({flag: ctx.globalStorage.extensionProperties.globalFlag});
+        } catch{
+          ctx.response.code = 500;
+          ctx.response.json({ error: 'INTERNAL_ERROR', message: 'Failed to read flag' });
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: 'flag',
+      handle: function handle(ctx) {
+        try {
+          // Parse JSON safely
+          let body;
+          try {
+            body = ctx.request.json();
+          } catch{
+            ctx.response.code = 400;
+            ctx.response.json({ error: 'BAD_REQUEST', message: 'Body must be valid JSON' });
+            return;
+          }
+
+          // Validate that body exists and flag is boolean
+          if(!body || (typeof body.flag != "boolean")){
+            ctx.response.code = 400;
+            ctx.response.json({ error: 'BAD_REQUEST', message: 'Flag must be a boolean' });
+            return;
+          }
+          
+          ctx.globalStorage.extensionProperties.globalFlag = body.flag;
+          ctx.response.json({flag: body.flag});
+        } catch {
+          ctx.response.code = 500;
+          ctx.response.json({ error: 'INTERNAL_ERROR', message: 'Failed to update flag' });
+        }
       }
     }
   ]
