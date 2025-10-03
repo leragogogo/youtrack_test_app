@@ -1,0 +1,12 @@
+.widget {
+    padding: 16px;
+}
+
+.projects {
+    margin-top: 24px;
+}
+
+.no-projects {
+    color: 'var(--ring-secondary-color)';
+    margin-top: 8px
+}
