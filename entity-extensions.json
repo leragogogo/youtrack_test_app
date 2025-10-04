@@ -2,10 +2,12 @@
     "entityTypeExtensions": [
         {
             "entityType": "AppGlobalStorage",
-
-            "properties":{
-                "globalFlag":{
+            "properties": {
+                "globalFlag": {
                     "type": "boolean"
+                },
+                "globalFlagVersion": {
+                    "type": "int"
                 }
             }
         }

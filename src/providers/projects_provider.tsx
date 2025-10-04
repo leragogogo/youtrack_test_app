@@ -2,7 +2,7 @@ import React, { useContext, useReducer, createContext, useEffect } from 'react'
 import { fetchProjects, type Project } from '../services/projects_service'
 import { useHost } from './host_provider';
 
-
+// Type describing the data stored in projects provider's state
 type State = {
     projectsLoading: boolean;
     projectError: string | null;
@@ -16,14 +16,15 @@ type Action = { type: "LOAD_START" } |
 
 const initial: State = { projectsLoading: true, projectError: null, projects: null };
 
+// Reducer function to handle state transitions
 function reducer(state: State, action: Action): State {
     switch (action.type) {
         case "LOAD_START": return initial;
-        case "LOAD_SUCCESS": return { 
-            projectsLoading: false, projectError: null, projects: action.payload 
+        case "LOAD_SUCCESS": return {
+            projectsLoading: false, projectError: null, projects: action.payload
         };
-        case "LOAD_ERROR": return { 
-            projectsLoading: false, projectError: action.payload, projects: null 
+        case "LOAD_ERROR": return {
+            projectsLoading: false, projectError: action.payload, projects: null
         };
         default: return state;
     }
@@ -43,8 +44,9 @@ export const ProjectsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             try {
                 const data = await fetchProjects(host);
                 dispatch({ type: "LOAD_SUCCESS", payload: data });
-            } catch {
-                dispatch({ type: "LOAD_ERROR", payload: "failed to load projects" });
+            } catch (e: any) {
+                const data = e?.response?.data
+                dispatch({ type: "LOAD_ERROR", payload: data?.message ?? "failed to load projects" });
             }
         })();
     }, []);
@@ -54,6 +56,8 @@ export const ProjectsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     </ProjectsContext.Provider>
 }
 
+// Custom hook to access project state in other components
+// Throws an error if used outside of <ProjectsProvider>
 export function useProjects(): State {
     const ctx = useContext(ProjectsContext);
     if (!ctx) throw new Error("useProjects must be used inside ProjectsProvider");

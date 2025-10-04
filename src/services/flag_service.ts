@@ -1,14 +1,20 @@
 import { HostAPI } from "../../@types/globals";
 
 // --- Service to fetch and update flag value ---
-
-export async function getFlag(host: HostAPI): Promise<boolean> {
-    const data = await host.fetchApp('backend/flag', {});
-    return (data as { flag: boolean }).flag;
+export type FlagJSON = {
+    flag: boolean;
+    version: number;
 }
 
-export async function setFlag(host: HostAPI, newFlag: boolean) {
+export async function getFlag(host: HostAPI): Promise<FlagJSON> {
+    const data = await host.fetchApp('backend/flag', {});
+    return data as FlagJSON;
+}
+
+export async function setFlag(
+    host: HostAPI, newFlag: boolean, version: number
+): Promise<FlagJSON> {
     const data = await host.fetchApp('backend/flag',
-        { method: "POST", body: { flag: newFlag } });
-    return (data as { flag: boolean }).flag;
+        { method: "POST", body: { flag: newFlag, version: version } });
+    return data as FlagJSON;
 }
